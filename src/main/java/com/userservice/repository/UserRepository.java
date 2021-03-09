@@ -9,8 +9,10 @@ import com.userservice.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	User findByIdAndDeleted(Long id, Boolean deleteFlag);
+	User findByIdAndIsDelete(Long id, Boolean deleteFlag);
 	
-	@Query("SELECT u.id FROM users u")
+	@Query("SELECT u.id FROM User u")
 	Optional<Long> findByEmail(String email);
+	
+	void deleteById(Long id);
 }

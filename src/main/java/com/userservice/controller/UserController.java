@@ -55,4 +55,9 @@ public class UserController {
 		return ResponseEntity.ok(ResponseDto.builder().build());
 	}
 
+	@DeleteMapping("/user/delete/{id}")
+	public ResponseEntity<ResponseDto> deleteUserFromDb(@PathVariable Long id) throws UserServiceException {
+		userService.deleteUserFromDb(id);
+		return ResponseEntity.ok(ResponseDto.builder().build());
+	}
 }

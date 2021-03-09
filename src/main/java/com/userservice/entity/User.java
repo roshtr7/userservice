@@ -24,7 +24,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	private Long userId;
+	private Long id;
 
 	@NotBlank(message = "First name is mandatory")
 	@Column(nullable = false)
@@ -37,7 +37,7 @@ public class User {
 	@Email(message = "Enter a valid email")
 	@Column(nullable = false, unique = true)
 	private String email;
-	
+
 	@NotNull(message = "DOB is mandatory")
 	@Column(nullable = false)
 	private Date dob;
@@ -49,8 +49,9 @@ public class User {
 	@NotNull(message = "Pin code is mandatory")
 	@Column(nullable = false)
 	private Long pinCode;
-	
+
 	@NotNull
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+	@Builder.Default
 	private Boolean isDelete = false;
 }
