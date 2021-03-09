@@ -26,23 +26,31 @@ public class UserService {
 	private UserRepository userRepository;
 
 	public UserDto getUserById(Long id) throws UserServiceException {
-		User user = Optional.of(userRepository.findById(id).get())
+		User user = Optional.of(userRepository.findByIdAndDeleted(id, false))
 				.orElseThrow(() -> new UserServiceException("user not found"));
 		return UserDto.builder().id(user.getUserId()).firstName(user.getFirstName()).lastName(user.getLastName())
 				.email(user.getEmail()).build();
 
 	}
 
-	public ResponseDto registerUser(UserDto userDto) {
+	public ResponseDto registerUser(UserDto userDto) throws UserServiceException {
 		List<String> errorList = validateUser(userDto);
 		if (errorList.size() > 0) {
 			return ResponseDto.builder().errors(errorList).build();
 		}
+		validateEmail(userDto.getEmail());
 		User user = User.builder().firstName(userDto.getFirstName()).lastName(userDto.getLastName())
 				.email(userDto.getEmail()).dob(userDto.getDob()).doj(userDto.getDoj()).pinCode(userDto.getPinCode())
 				.isDelete(false).build();
 		userRepository.save(user);
 		return ResponseDto.builder().build();
+	}
+
+	public void validateEmail(String email) throws UserServiceException {
+		Optional<Long> userId = userRepository.findByEmail(email);
+		if(userId.isPresent()) {
+			throw new UserServiceException("Duplicate Email!!");
+		}
 	}
 
 	public List<String> validateUser(UserDto user) {
@@ -61,7 +69,8 @@ public class UserService {
 		if (errorList.size() > 0) {
 			return ResponseDto.builder().errors(errorList).build();
 		}
-		User user = Optional.of(userRepository.findById(userDto.getId()).get())
+		validateEmail(userDto.getEmail());
+		User user = Optional.of(userRepository.findByIdAndDeleted(userDto.getId(), false))
 				.orElseThrow(() -> new UserServiceException("user not found"));
 		mapUserDtoToUser(userDto, user);
 		userRepository.save(user);
@@ -75,6 +84,13 @@ public class UserService {
 		user.setDob(userDto.getDob());
 		user.setDoj(userDto.getDoj());
 		user.setPinCode(userDto.getPinCode());
-		user.setDelete(false);
+		user.setIsDelete(false);
+	}
+
+	public void deleteUser(Long id) throws UserServiceException {
+		User user = Optional.of(userRepository.findByIdAndDeleted(id, false))
+				.orElseThrow(() -> new UserServiceException("user not found"));
+		user.setIsDelete(true);
+		userRepository.save(user);
 	}
 }

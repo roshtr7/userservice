@@ -52,5 +52,5 @@ public class User {
 	
 	@NotNull
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-	private boolean isDelete = false;
+	private Boolean isDelete = false;
 }
