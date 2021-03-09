@@ -87,6 +87,15 @@ public class UserService {
 		user.setIsDelete(false);
 	}
 
+	private void mapUserToUserDto(UserDto userDto, User user) {
+		userDto.setFirstName(user.getFirstName());
+		userDto.setLastName(user.getLastName());
+		userDto.setEmail(user.getEmail());
+		userDto.setDob(user.getDob());
+		userDto.setDoj(user.getDoj());
+		userDto.setPinCode(user.getPinCode());
+	}
+
 	public void deleteUser(Long id) throws UserServiceException {
 		User user = Optional.ofNullable(userRepository.findByIdAndIsDelete(id, false))
 				.orElseThrow(() -> new UserServiceException("user not found"));
@@ -97,8 +106,19 @@ public class UserService {
 	public void deleteUserFromDb(Long id) {
 		userRepository.deleteById(id);
 	}
-	
+
 	public static void main(String args[]) {
-		System.out.println("a = "+ Optional.ofNullable(null).orElse(2));
+		System.out.println("a = " + Optional.ofNullable(null).orElse(2));
+	}
+
+	public List<UserDto> getUserList() {
+		List<User> userList = userRepository.getUsersOrderByDOBAndDOJ();
+		List<UserDto> userDtoList = new ArrayList<>();
+		userList.stream().forEach(u -> {
+			UserDto userDto = UserDto.builder().build();
+			mapUserToUserDto(userDto, u);
+			userDtoList.add(userDto);
+		});
+		return userDtoList;
 	}
 }

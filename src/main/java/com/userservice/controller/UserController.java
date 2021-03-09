@@ -1,5 +1,7 @@
 package com.userservice.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,11 @@ public class UserController {
 	@GetMapping("/user/{id}")
 	public ResponseEntity<UserDto> getUserById(Long id) throws UserServiceException {
 		return ResponseEntity.ok(userService.getUserById(id));
+	}
+
+	@GetMapping("/user/list")
+	public ResponseEntity<List<UserDto>> getUserList() {
+		return ResponseEntity.ok(userService.getUserList());
 	}
 
 	@PostMapping("/user")
