@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.userservice.entity.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 
 	User findByIdAndIsDelete(Long id, Boolean deleteFlag);
 

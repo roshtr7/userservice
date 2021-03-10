@@ -30,7 +30,7 @@ public class UserDto {
 	@NotNull(message = "DOJ name is mandatory")
 	private Date doj;
 	
-	@NotNull(message = "Pin code name is mandatory")
-	private Long pinCode;
+	@NotBlank(message = "Pin code name is mandatory")
+	private String pinCode;
 	
 }

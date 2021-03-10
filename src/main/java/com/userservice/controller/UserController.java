@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.userservice.dto.ResponseDto;
@@ -22,11 +23,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
-	@GetMapping("/test")
-	public String test() {
-		return "test";
-	}
 
 	@GetMapping("/user/{id}")
 	public ResponseEntity<UserDto> getUserById(Long id) throws UserServiceException {
@@ -66,5 +62,13 @@ public class UserController {
 	public ResponseEntity<ResponseDto> deleteUserFromDb(@PathVariable Long id) throws UserServiceException {
 		userService.deleteUserFromDb(id);
 		return ResponseEntity.ok(ResponseDto.builder().build());
+	}
+
+	@GetMapping("/user/search")
+	public ResponseEntity<ResponseDto> searchUser(@RequestParam(value = "firstName", required = false) String firstName,
+			@RequestParam(value = "lastName", required = false) String lastName,
+			@RequestParam(value = "pinCode", required = false) String pinCode) {
+		return ResponseEntity
+				.ok(ResponseDto.builder().data(userService.searchUsersByFilter(firstName, lastName, pinCode)).build());
 	}
 }

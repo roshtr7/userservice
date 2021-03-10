@@ -50,9 +50,9 @@ public class User {
 	@Column(nullable = false)
 	private Date dateOfJoining;
 
-	@NotNull(message = "Pin code is mandatory")
+	@NotBlank(message = "Pin code is mandatory")
 	@Column(nullable = false)
-	private Long pinCode;
+	private String pinCode;
 
 	@NotNull
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
