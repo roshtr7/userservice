@@ -40,8 +40,8 @@ public class UserService {
 		}
 		validateEmail(userDto.getEmail());
 		User user = User.builder().firstName(userDto.getFirstName()).lastName(userDto.getLastName())
-				.email(userDto.getEmail()).dob(userDto.getDob()).doj(userDto.getDoj()).pinCode(userDto.getPinCode())
-				.build();
+				.email(userDto.getEmail()).dateOfBirth(userDto.getDob()).dateOfJoining(userDto.getDoj())
+				.pinCode(userDto.getPinCode()).build();
 		userRepository.save(user);
 		return ResponseDto.builder().build();
 	}
@@ -81,8 +81,8 @@ public class UserService {
 		user.setFirstName(userDto.getFirstName());
 		user.setLastName(userDto.getLastName());
 		user.setEmail(userDto.getEmail());
-		user.setDob(userDto.getDob());
-		user.setDoj(userDto.getDoj());
+		user.setDateOfBirth(userDto.getDob());
+		user.setDateOfJoining(userDto.getDoj());
 		user.setPinCode(userDto.getPinCode());
 		user.setIsDelete(false);
 	}
@@ -91,8 +91,8 @@ public class UserService {
 		userDto.setFirstName(user.getFirstName());
 		userDto.setLastName(user.getLastName());
 		userDto.setEmail(user.getEmail());
-		userDto.setDob(user.getDob());
-		userDto.setDoj(user.getDoj());
+		userDto.setDob(user.getDateOfBirth());
+		userDto.setDoj(user.getDateOfJoining());
 		userDto.setPinCode(user.getPinCode());
 	}
 

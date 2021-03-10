@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.userservice.entity.User;
 
@@ -12,11 +13,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	User findByIdAndIsDelete(Long id, Boolean deleteFlag);
 
-	@Query("SELECT u.id FROM User u")
-	Optional<Long> findByEmail(String email);
+	@Query("SELECT u.id FROM User u where u.email = (:email)")
+	Optional<Long> findByEmail(@Param("email")String email);
 
 	void deleteById(Long id);
 
-	@Query("SELECT u FROM User u ORDER BY u.dob DESC, u.doj DESC")
+	@Query("SELECT u FROM User u ORDER BY u.dateOfBirth DESC, u.dateOfJoining DESC")
 	List<User> getUsersOrderByDOBAndDOJ();
 }
