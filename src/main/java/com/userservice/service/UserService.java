@@ -103,7 +103,9 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	public void deleteUserFromDb(Long id) {
+	public void deleteUserFromDb(Long id) throws UserServiceException {
+		Optional.ofNullable(userRepository.findByIdAndIsDelete(id, false))
+		.orElseThrow(() -> new UserServiceException("user not found"));
 		userRepository.deleteById(id);
 	}
 
