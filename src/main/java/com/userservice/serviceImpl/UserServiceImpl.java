@@ -19,6 +19,7 @@ import com.userservice.entity.User;
 import com.userservice.exception.UserServiceException;
 import com.userservice.repository.UserRepository;
 import com.userservice.service.UserService;
+import com.userservice.util.AppConstants;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto getUserById(Long id) throws UserServiceException {
 		User user = Optional.ofNullable(userRepository.findByIdAndIsDelete(id, false))
-				.orElseThrow(() -> new UserServiceException("user not found"));
+				.orElseThrow(() -> new UserServiceException(AppConstants.ErrorMsgs.USER_NOT_FOUND));
 		return UserDto.builder().id(user.getId()).firstName(user.getFirstName()).lastName(user.getLastName())
 				.email(user.getEmail()).build();
 
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	public void validateEmail(String email) throws UserServiceException {
 		Optional<Long> userId = userRepository.findByEmail(email);
 		if (userId.isPresent()) {
-			throw new UserServiceException("Duplicate Email!!");
+			throw new UserServiceException(AppConstants.ErrorMsgs.DUPLICATE_EMAIL);
 		}
 	}
 
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserService {
 			return ResponseDto.builder().errors(errorList).build();
 		}
 		User user = Optional.ofNullable(userRepository.findByIdAndIsDelete(userDto.getId(), false))
-				.orElseThrow(() -> new UserServiceException("user not found"));
+				.orElseThrow(() -> new UserServiceException(AppConstants.ErrorMsgs.USER_NOT_FOUND));
 		mapUserDtoToUser(userDto, user);
 		userRepository.save(user);
 		return ResponseDto.builder().build();
@@ -104,7 +105,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(Long id) throws UserServiceException {
 		User user = Optional.ofNullable(userRepository.findByIdAndIsDelete(id, false))
-				.orElseThrow(() -> new UserServiceException("user not found"));
+				.orElseThrow(() -> new UserServiceException(AppConstants.ErrorMsgs.USER_NOT_FOUND));
 		user.setIsDelete(true);
 		userRepository.save(user);
 	}
@@ -112,13 +113,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUserFromDb(Long id) throws UserServiceException {
 		Optional.ofNullable(userRepository.findById(id))
-				.orElseThrow(() -> new UserServiceException("user not found"));
+				.orElseThrow(() -> new UserServiceException(AppConstants.ErrorMsgs.USER_NOT_FOUND));
 		userRepository.deleteById(id);
 	}
-
-//	public static void main(String args[]) {
-//		System.out.println("a = " + Optional.ofNullable(null).orElse(2));
-//	}
 
 	@Override
 	public List<UserDto> getUserList() {

@@ -14,12 +14,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.userservice.dto.ResponseDto;
 import com.userservice.exception.UserServiceException;
+import com.userservice.util.AppConstants;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
 	@ExceptionHandler({ UserServiceException.class })
 	public ResponseEntity<ResponseDto> handleThreadException(UserServiceException ex) {
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ RuntimeException.class, Exception.class })
 	public ResponseEntity<ResponseDto> handleException(Exception ex) {
 		List<String> errors = logErrorsAndGetErrorResponseArray(ex,
-				Optional.of("An unexpected error occurred while processing request. Please try again later. "));
+				Optional.of(AppConstants.ErrorMsgs.UNEXPECTED_ERROR));
 		return new ResponseEntity<>(ResponseDto.builder().errors(errors).build(), HttpStatus.UNPROCESSABLE_ENTITY);
 
 	}
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	private List<String> logErrorsAndGetErrorResponseArray(Exception ex, Optional<String> defaultErrorMsg) {
 		List<String> errors = new ArrayList<>();
 		if (defaultErrorMsg.isPresent()) {
-			errors.add("An unexpected error occurred while processing request. Please try again later. ");
+			errors.add(AppConstants.ErrorMsgs.UNEXPECTED_ERROR);
 		}
 		errors.add(ex.getMessage());
 		logger.error("---------***   Exception occured  ***---------");
