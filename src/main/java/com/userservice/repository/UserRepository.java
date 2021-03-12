@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
 	void deleteById(Long id);
 
-	@Query("SELECT u FROM User u ORDER BY u.dateOfBirth DESC, u.dateOfJoining DESC")
-	List<User> getUsersOrderByDOBAndDOJ();
+	@Query("SELECT u FROM User u WHERE u.isDelete = false ORDER BY u.dateOfBirth DESC, u.dateOfJoining DESC")
+	List<User> getUsersOrderByDOBAndDOJ();	
 }
