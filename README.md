@@ -3,7 +3,7 @@
 
 | Method    |   Path    			| 		 Description 				|
 | :---      |     :---:     		|          ---: 					|
-|GET		| /users/list			|	Get all userservice             |
+|GET		| /users/list			|	Get all users                   |
 |GET		| /users/search			|	Search a user        			| 
 |DELETE		| /users/{id}			|	Delete user by id (soft delete) |
 |DELETE		| /users/delete/{id}	|	Delete user by id (hard delete) |
